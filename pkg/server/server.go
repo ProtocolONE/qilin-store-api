@@ -1,0 +1,47 @@
+package server
+
+import (
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"go.uber.org/zap"
+	"strconv"
+	"super_api/pkg/api"
+	"super_api/pkg/conf"
+	"super_api/pkg/services"
+)
+
+type server struct {
+	echo         *echo.Echo
+	serverConfig *conf.ServerConfig
+}
+
+func NewServer(config *conf.Config) (*server, error) {
+	httpServer := echo.New()
+	server := &server{
+		echo:         httpServer,
+		serverConfig: config.Server,
+	}
+
+	httpServer.Use(middleware.Logger())
+	httpServer.Use(middleware.Recover())
+
+	dbProvider, err := services.NewDatabaseProvider(config.Db.Connection, config.Db.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	gameService := services.NewGameService(dbProvider)
+
+	apiGroup := httpServer.Group("/api/v1")
+	if _, err := api.InitGameRouter(apiGroup, gameService); err != nil {
+		return nil, err
+	}
+
+	return server, nil
+}
+
+func (s *server) Start() error {
+	zap.L().Info("Starting http server", zap.Int("port", s.serverConfig.Port))
+
+	return s.echo.Start(":" + strconv.Itoa(s.serverConfig.Port))
+}

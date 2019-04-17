@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"github.com/pkg/errors"
 	"net/http"
@@ -31,6 +32,9 @@ func (service *gameService) GetById(id string) (*model.Game, error) {
 	result := model.Game{}
 	err = db.C("games").Find(bson.M{"qilin_id": id}).One(&result)
 	if err != nil {
+		if err == mgo.ErrNotFound {
+			return nil, common.NewServiceError(http.StatusNotFound, errors.Wrap(err, CouldNotGetGame))
+		}
 		return nil, common.NewServiceError(http.StatusInternalServerError, errors.Wrap(err, CouldNotGetGame))
 	}
 

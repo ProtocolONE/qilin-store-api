@@ -7,11 +7,11 @@ import (
 	"super_api/pkg/common"
 )
 
-func (s *server) SuperErrorHandler(err error, c echo.Context) {
-	SuperErrorHandler(err, c, s.echo.Debug)
+func (s *server) QilinStoreErrorHandler(err error, c echo.Context) {
+	QilinStoreErrorHandler(err, c, s.echo.Debug)
 }
 
-func SuperErrorHandler(err error, c echo.Context, isDebug bool) {
+func QilinStoreErrorHandler(err error, c echo.Context, isDebug bool) {
 	var (
 		code = http.StatusInternalServerError
 		msg  interface{}

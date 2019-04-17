@@ -19,7 +19,7 @@ func Test_server_SuperErrorHandler(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := s.echo.NewContext(req, rec)
 	rec.Code = 500
-	s.SuperErrorHandler(errors.New("Internal error"), c)
+	s.QilinStoreErrorHandler(errors.New("Internal error"), c)
 
 }
 
@@ -37,7 +37,7 @@ func TestSuperErrorHandler(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			SuperErrorHandler(tt.args.err, tt.args.c, tt.args.isDebug)
+			QilinStoreErrorHandler(tt.args.err, tt.args.c, tt.args.isDebug)
 		})
 	}
 }

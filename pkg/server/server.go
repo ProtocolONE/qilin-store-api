@@ -7,12 +7,14 @@ import (
 	"strconv"
 	"super_api/pkg/api"
 	"super_api/pkg/conf"
+	"super_api/pkg/interfaces"
 	"super_api/pkg/services"
 )
 
 type server struct {
 	echo         *echo.Echo
 	serverConfig *conf.ServerConfig
+	db           interfaces.DatabaseProvider
 }
 
 func NewServer(config *conf.Config) (*server, error) {
@@ -24,6 +26,8 @@ func NewServer(config *conf.Config) (*server, error) {
 
 	httpServer.Use(middleware.Logger())
 	httpServer.Use(middleware.Recover())
+
+	httpServer.HTTPErrorHandler = server.QilinStoreErrorHandler
 
 	dbProvider, err := services.NewDatabaseProvider(config.Db.Connection, config.Db.Name)
 	if err != nil {
@@ -44,4 +48,8 @@ func (s *server) Start() error {
 	zap.L().Info("Starting http server", zap.Int("port", s.serverConfig.Port))
 
 	return s.echo.Start(":" + strconv.Itoa(s.serverConfig.Port))
+}
+
+func (s *server) Shutdown() {
+	s.db.Shutdown()
 }

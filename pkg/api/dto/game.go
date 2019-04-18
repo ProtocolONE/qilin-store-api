@@ -23,6 +23,11 @@ type GameRequirementsDTO struct {
 	Systems   map[string]SystemsDTO `json:"systems"`
 }
 
+type LinkDTO struct {
+	Title string `json:"title"`
+	Id    string `json:"id"`
+}
+
 type GameDTO struct {
 	Name         string              `json:"name"`
 	Preview      string              `json:"preview"`
@@ -31,9 +36,9 @@ type GameDTO struct {
 	Price        float32             `json:"price"`
 	Description  string              `json:"description"`
 	Platforms    []string            `json:"platforms"`
-	Tags         []string            `json:"tags"`
+	Tags         []LinkDTO            `json:"tags"`
 	ReleaseDate  string              `json:"releaseDate"`
-	Developer    string              `json:"developer"`
-	Publisher    string              `json:"publisher"`
+	Developer    LinkDTO              `json:"developer"`
+	Publisher    LinkDTO              `json:"publisher"`
 	Requirements GameRequirementsDTO `json:"requirements"`
 }

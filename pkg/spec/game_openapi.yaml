@@ -1,0 +1,213 @@
+openapi: 3.0.0
+info:
+  description: "Qilin store api"
+  version: "1.0.0"
+  title: "Qilin store API"
+  contact:
+    email: "roman.golenok@protocol.one"
+tags:
+  - name: "games"
+    description: "About games info"
+
+servers:
+  - url: TODO:://add_here
+    description: Master test server
+
+paths:
+  /api/v1/games/{gameId}:
+    get:
+      tags:
+        - "games"
+      summary: "Get list of games"
+      parameters:
+        - name: title
+          in: path
+          description: "Id of game"
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalError:
+      description: Internal Server Error
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: "Resource with same unique id already exists"
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 422
+            message: "Fields required: 'title, description'"
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Game:
+      type: object
+      properties:
+        name:
+          type: string
+        preview:
+          type: string
+        title:
+          type: string
+        rating:
+          type: number
+        price:
+          type: object
+          properties:
+            currency:
+              type: string
+            value:
+              type: number
+        description:
+          type: string
+        platforms:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        releaseDate:
+          type: string
+          format: 'date-time'
+        #TODO: узнать, не надо ли здесь передавать объект, чтобы например сформировать ссылку для перехода на сайт разработчика
+        developer:
+          type: string
+        publisher:
+          type: string
+        requirements:
+          $ref: "#/components/schemas/Requirements"
+
+    Requirements:
+      type: object
+      properties:
+        languages:
+          type: array
+          items:
+            $ref: "#/components/schemas/LanguageSupport"
+        systems:
+          type: string
+          additionalProperties:
+            $ref: "#/components/schemas/SystemSupport"
+
+    SystemRequirements:
+      type: object
+      properties:
+        os:
+          type: string
+        cpu:
+          type: string
+        ram:
+          type: string
+        gpu:
+          type: string
+        disk_space:
+          type: string
+
+    SystemSupport:
+      type: object
+      properties:
+        minimal:
+          $ref: "#/components/schemas/SystemRequirements"
+        recommended:
+          $ref: "#/components/schemas/SystemRequirements"
+
+    LanguageSupport:
+      type: object
+      properties:
+        audio:
+          type: array
+          items:
+            type: string
+        text:
+          type: array
+          items:
+            type: string
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+  parameters:
+    Offset:
+      in: query
+      name: offset
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+      description: The number of items to skip before starting to collect the result set.
+    Limit:
+      in: query
+      name: limit
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+      description: The numbers of items to return.
+
+security:
+  - bearerAuth: []

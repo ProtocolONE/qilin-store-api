@@ -28,6 +28,6 @@ func GameFromModel(game *model.Game, lng string) *dto.GameDTO {
 		Preview:     game.Previews.GetValueOrDefault(lng),
 		Tags:        tags,
 		ReleaseDate: game.ReleaseDate.Format(time.RFC3339),
-		//TODO
+
 	}
 }

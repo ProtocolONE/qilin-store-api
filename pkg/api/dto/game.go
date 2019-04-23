@@ -36,9 +36,9 @@ type GameDTO struct {
 	Price        float32             `json:"price"`
 	Description  string              `json:"description"`
 	Platforms    []string            `json:"platforms"`
-	Tags         []LinkDTO            `json:"tags"`
+	Tags         []LinkDTO           `json:"tags"`
 	ReleaseDate  string              `json:"releaseDate"`
-	Developer    LinkDTO              `json:"developer"`
-	Publisher    LinkDTO              `json:"publisher"`
+	Developer    LinkDTO             `json:"developer"`
+	Publisher    LinkDTO             `json:"publisher"`
 	Requirements GameRequirementsDTO `json:"requirements"`
 }

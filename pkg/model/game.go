@@ -11,8 +11,8 @@ type (
 	Game struct {
 		QilinID              string           `json:"qilin_id"`
 		Title                string           `json:"title"`
-		Developers           string           `json:"developers"`
-		Publishers           string           `json:"publishers"`
+		Developers           Link           `json:"developers"`
+		Publishers           Link           `json:"publishers"`
 		ReleaseDate          time.Time        `json:"release_date"`
 		DisplayRemainingTime bool             `json:"display_remaining_time"`
 		AchievementOnProd    bool             `json:"achievement_on_prod"`
@@ -27,13 +27,18 @@ type (
 		Previews             LocalizedString  `json:"previews"`
 	}
 
+	Link struct {
+		ID    string    `json:"id"`
+		Title string `json:"title"`
+	}
+
 	GameGenre struct {
 		ID   int `json:"id"`
 		Name LocalizedString
 	}
 
 	GameTag struct {
-		ID   int `json:"id"`
+		ID   string `json:"id"`
 		Name LocalizedString
 	}
 

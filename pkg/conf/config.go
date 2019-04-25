@@ -4,4 +4,5 @@ package conf
 type Config struct {
 	Server *ServerConfig
 	Db     *DbConfig
+	Bus    *EventBusConfig
 }

@@ -11,3 +11,7 @@ type DbConfig struct {
 	Connection string `envconfig:"CONNECTION" required:"true" default:"localhost:27017"`
 	Name       string `envconfig:"DB_NAME" required:"true" default:"DEVELOP"`
 }
+
+type EventBusConfig struct {
+	Connection string `envconfig:"CONNECTION" required:"true" default:"amqp://127.0.0.1:5672"`
+}

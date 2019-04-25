@@ -11,8 +11,8 @@ type (
 	Game struct {
 		QilinID              string           `json:"qilin_id"`
 		Title                string           `json:"title"`
-		Developers           Link           `json:"developers"`
-		Publishers           Link           `json:"publishers"`
+		Developers           Link             `json:"developers"`
+		Publishers           Link             `json:"publishers"`
 		ReleaseDate          time.Time        `json:"release_date"`
 		DisplayRemainingTime bool             `json:"display_remaining_time"`
 		AchievementOnProd    bool             `json:"achievement_on_prod"`
@@ -28,12 +28,12 @@ type (
 	}
 
 	Link struct {
-		ID    string    `json:"id"`
+		ID    string `json:"id"`
 		Title string `json:"title"`
 	}
 
 	GameGenre struct {
-		ID   int `json:"id"`
+		ID   string `json:"id"`
 		Name LocalizedString
 	}
 
@@ -56,9 +56,9 @@ type (
 		Processor        string `json:"processor"`
 		Graphics         string `json:"graphics"`
 		Sound            string `json:"sound"`
-		Ram              int    `json:"ram"`
+		Ram              int32    `json:"ram"`
 		RamDimension     string `json:"ram_dimension"`
-		Storage          int    `json:"storage"`
+		Storage          int32    `json:"storage"`
 		StorageDimension string `json:"storage_dimension"`
 		Other            string `json:"other"`
 	}
@@ -87,8 +87,13 @@ type (
 	}
 
 	GameLangs struct {
-		EN Langs
-		RU Langs
+		EN Langs `json:"en"`
+		RU Langs `json:"ru"`
+		FR Langs `json:"fr"`
+		ES Langs `json:"es"`
+		DE Langs `json:"de"`
+		IT Langs `json:"it"`
+		PT Langs `json:"pt"`
 	}
 
 	GameReviews []GameReview

@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
+	"go.uber.org/zap"
 	"super_api/pkg/interfaces"
 )
 
@@ -13,6 +14,8 @@ type dbProvider struct {
 }
 
 func NewDatabaseProvider(connectionString string, databaseName string) (interfaces.DatabaseProvider, error) {
+	zap.L().Info("Creating database provider")
+
 	bson.SetJSONTagFallback(true)
 	bson.SetRespectNilValues(true)
 

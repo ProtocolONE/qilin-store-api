@@ -18,9 +18,9 @@ paths:
     get:
       tags:
         - "games"
-      summary: "Get list of games"
+      summary: "Get game details"
       parameters:
-        - name: title
+        - name: gameId
           in: path
           description: "Id of game"
           required: true
@@ -33,9 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Game"
+                $ref: "#/components/schemas/Game"
         400:
           $ref: '#/components/responses/BadRequest'
         500:

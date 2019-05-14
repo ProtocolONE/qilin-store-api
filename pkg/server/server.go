@@ -29,7 +29,7 @@ func NewServer(config *conf.Config) (*server, error) {
 
 	httpServer.HTTPErrorHandler = server.QilinStoreErrorHandler
 
-	dbProvider, err := services.NewDatabaseProvider(config.Db.Connection, config.Db.Name)
+	dbProvider, err := services.NewDatabaseProvider(config.Db)
 	if err != nil {
 		return nil, err
 	}

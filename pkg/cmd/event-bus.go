@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
-	"qilin-store-api/pkg/server"
-	"github.com/ProtocolONE/qilin-store-apire-api/pkg/services"
+	"github.com/ProtocolONE/qilin-store-api/pkg/server"
+	"github.com/ProtocolONE/qilin-store-api/pkg/services"
 )
 
 func init() {
@@ -20,7 +20,7 @@ func init() {
 func runEventBus(_ *cobra.Command, _ []string) {
 	zap.L().Info("Starting event bus command")
 
-	dbProvider, err := services.NewDatabaseProvider(cfg.Db.Connection, cfg.Db.Name)
+	dbProvider, err := services.NewDatabaseProvider(cfg.Db)
 	if err != nil {
 		zap.L().Fatal("Can't create database", zap.Error(err))
 	}

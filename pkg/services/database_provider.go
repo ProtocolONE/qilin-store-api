@@ -6,6 +6,8 @@ import (
 	"go.uber.org/zap"
 	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
 	"github.com/ProtocolONE/qilin-store-api/pkg/conf"
+	"net/url"
+	"time"
 )
 
 type dbProvider struct {
@@ -16,7 +18,7 @@ type dbProvider struct {
 
 
 
-func NewDatabaseProvider(c *conf.Database) (interfaces.DatabaseProvider, error) {
+func NewDatabaseProvider(c *conf.DbConfig) (interfaces.DatabaseProvider, error) {
 	zap.L().Info("Creating database provider")
 
 	bson.SetJSONTagFallback(true)

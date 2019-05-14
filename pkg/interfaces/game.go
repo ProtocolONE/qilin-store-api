@@ -1,6 +1,6 @@
 package interfaces
 
-import "super_api/pkg/model"
+import "github.com/ProtocolONE/qilin-store-api/pkg/model"
 
 type GameService interface {
 	GetById(id string) (*model.Game, error)

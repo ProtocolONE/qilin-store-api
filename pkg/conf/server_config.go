@@ -8,8 +8,11 @@ type ServerConfig struct {
 }
 
 type DbConfig struct {
-	Connection string `envconfig:"CONNECTION" required:"true" default:"localhost:27017"`
-	Name       string `envconfig:"DB_NAME" required:"true" default:"DEVELOP"`
+	Host           string `envconfig:"HOST" required:"false" default:"127.0.0.1"`
+	Name           string `envconfig:"DATABASE" required:"false" default:"auth-one"`
+	User           string `envconfig:"USER" required:"false"`
+	Password       string `envconfig:"PASSWORD" required:"false"`
+	MaxConnections int    `envconfig:"MAX_CONNECTIONS" required:"false" default:"100"`
 }
 
 type EventBusConfig struct {

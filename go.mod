@@ -1,4 +1,4 @@
-module super_api
+module github.com/ProtocolONE/qilin-super-api
 
 require (
 	github.com/ProtocolONE/qilin-common v0.0.0-20190425174539-bb1d2cd55b05

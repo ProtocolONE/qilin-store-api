@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"go.uber.org/zap"
 	"net/http"
-	"super_api/pkg/common"
+	"github.com/ProtocolONE/qilin-store-api/pkg/common"
 )
 
 func (s *server) QilinStoreErrorHandler(err error, c echo.Context) {

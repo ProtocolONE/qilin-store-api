@@ -3,8 +3,8 @@ package api
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"super_api/pkg/api/mapper"
-	"super_api/pkg/interfaces"
+	"github.com/ProtocolONE/qilin-store-api/pkg/api/mapper"
+	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
 )
 
 type GameRouter struct {

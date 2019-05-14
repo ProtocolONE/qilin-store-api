@@ -5,10 +5,10 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"go.uber.org/zap"
 	"strconv"
-	"super_api/pkg/api"
-	"super_api/pkg/conf"
-	"super_api/pkg/interfaces"
-	"super_api/pkg/services"
+	"github.com/ProtocolONE/qilin-store-api/pkg/api"
+	"github.com/ProtocolONE/qilin-store-api/pkg/conf"
+	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
+	"github.com/ProtocolONE/qilin-store-api/pkg/services"
 )
 
 type server struct {

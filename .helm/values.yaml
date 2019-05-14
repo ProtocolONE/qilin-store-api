@@ -1,0 +1,67 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+enableCertIssuer: true
+enableRedis: true
+enableMongo: true
+
+ingress:
+  hostname: qilinstoreapi.tst.protocol.one
+  path: /
+
+certIssuer:
+  email: admin@protocol.one
+
+backend:
+  name: qilinstoreapi
+  role: backend
+  image: "p1hub/p1qilinstoreapi"
+  imageTag: latest
+  port: 80
+  replicas: 1
+  service: 
+    type: ClusterIP
+    port: 80
+    protocol: TCP
+  env:
+    - QILINSTOREAPI_SERVER_PORT
+    - QILINSTOREAPI_SERVER_ALLOW_CREDENTIALS
+    - QILINSTOREAPI_SERVER_ALLOW_ORIGINS
+    - QILINSTOREAPI_SERVER_DEBUG
+    - QILINSTOREAPI_DATABASE_DSN
+    - QILINSTOREAPI_DATABASE_DEBUG
+    - QILINSTOREAPI_ENFORCER_HOST
+    - QILINSTOREAPI_ENFORCER_PORT
+    - QILINSTOREAPI_LOG_LEVEL
+    - QILINSTOREAPI_LOG_REPORT_CALLER
+    - QILINSTOREAPI_MAILER_HOST
+    - QILINSTOREAPI_MAILER_PORT
+    - QILINSTOREAPI_MAILER_USERNAME
+    - QILINSTOREAPI_MAILER_PASSWORD
+    - QILINSTOREAPI_MAILER_REPLY_TO
+    - QILINSTOREAPI_MAILER_FROM
+    - QILINSTOREAPI_MAILER_SKIP_VERIFY
+    - QILINSTOREAPI_NOTIFIER_API_KEY
+    - QILINSTOREAPI_NOTIFIER_HOST
+    - QILINSTOREAPI_NOTIFIER_SECRET
+    - QILINSTOREAPI_AUTH1_ISSUER
+    - QILINSTOREAPI_AUTH1_CLIENTID
+    - QILINSTOREAPI_AUTH1_CLIENTSECRET
+  
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

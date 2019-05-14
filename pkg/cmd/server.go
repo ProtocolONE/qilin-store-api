@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
-	"super_api/pkg/server"
+	"github.com/ProtocolONE/qilin-store-api/pkg/server"
 )
 
 var serverCmd = &cobra.Command{

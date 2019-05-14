@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
-	"super_api/pkg/server"
-	"super_api/pkg/services"
+	"qilin-store-api/pkg/server"
+	"github.com/ProtocolONE/qilin-store-apire-api/pkg/services"
 )
 
 func init() {

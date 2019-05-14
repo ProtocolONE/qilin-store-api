@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"os"
-	"super_api/pkg/conf"
+	"github.com/ProtocolONE/qilin-store-api/pkg/conf"
 )
 
 var (
@@ -21,7 +21,7 @@ func Execute() {
 	defer logger.Sync() // flushes buffer, if any
 
 	cfg = &conf.Config{}
-	if err := envconfig.Process("SUPER_API", cfg); err != nil {
+	if err := envconfig.Process("QILINSTOREAPI", cfg); err != nil {
 		logger.Fatal(fmt.Sprintf("Config init failed with error: %s\n", err))
 	}
 

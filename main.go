@@ -1,7 +1,7 @@
 package main
 
 import (
-	"super_api/pkg/cmd"
+	"github.com/ProtocolONE/qilin-store-api/pkg/cmd"
 )
 
 func main() {

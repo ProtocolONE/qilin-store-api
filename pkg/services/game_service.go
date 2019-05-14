@@ -5,9 +5,9 @@ import (
 	"github.com/globalsign/mgo/bson"
 	"github.com/pkg/errors"
 	"net/http"
-	"super_api/pkg/common"
-	"super_api/pkg/interfaces"
-	"super_api/pkg/model"
+	"github.com/ProtocolONE/qilin-store-api/pkg/common"
+	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
+	"github.com/ProtocolONE/qilin-store-api/pkg/model"
 )
 
 type gameService struct {

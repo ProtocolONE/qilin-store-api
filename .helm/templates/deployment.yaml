@@ -35,10 +35,6 @@ spec:
         heritage: {{ .Release.Service }}
         role: {{ $deployment.role }}
     spec:
-      volumes:
-      - name: {{ $deploymentName }}-config
-        secret:
-          secretName: {{ $deploymentName }}-config
       containers:
       - name: {{ $deployment.name }}
         image: {{ $deployment.image }}:{{ $deployment.imageTag }}

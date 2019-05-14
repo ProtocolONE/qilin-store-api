@@ -17,11 +17,11 @@ backend:
   role: backend
   image: "p1hub/p1qilinstoreapi"
   imageTag: latest
-  port: 80
+  port: 8080
   replicas: 1
   service: 
     type: ClusterIP
-    port: 80
+    port: 8080
     protocol: TCP
   env:
     - QILINSTOREAPI_DATABASE_HOST

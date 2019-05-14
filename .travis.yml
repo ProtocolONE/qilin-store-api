@@ -3,6 +3,10 @@ sudo: false
 go:
 - 1.11.x
 
+env:
+  global:
+    - GO111MODULE=on
+
 stages:
 - test
 - name: deploy

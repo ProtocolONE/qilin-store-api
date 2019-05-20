@@ -2,10 +2,10 @@ package mapper
 
 import (
 	"encoding/json"
+	"github.com/ProtocolONE/qilin-store-api/pkg/model"
 	"github.com/bxcodec/faker"
 	"github.com/globalsign/mgo/bson"
 	"github.com/stretchr/testify/require"
-	"super_api/pkg/model"
 	"testing"
 )
 

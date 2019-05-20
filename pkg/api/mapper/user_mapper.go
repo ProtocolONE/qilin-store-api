@@ -1,8 +1,8 @@
 package mapper
 
 import (
-	"super_api/pkg/api/dto"
-	"super_api/pkg/model"
+	"github.com/ProtocolONE/qilin-store-api/pkg/api/dto"
+	"github.com/ProtocolONE/qilin-store-api/pkg/model"
 )
 
 // UserFromModel is method for mapping db model to dto

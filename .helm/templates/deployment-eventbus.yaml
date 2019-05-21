@@ -1,5 +1,5 @@
 {{- $deployment := .Values.backend -}}
-{{- $deploymentName := printf "%s-%s" .Release.Name $deployment.name }}
+{{- $deploymentName := printf "%s-%s-eventbus" .Release.Name $deployment.name }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,8 +36,9 @@ spec:
         role: {{ $deployment.role }}
     spec:
       containers:
-      - name: {{ $deployment.name }}
+      - name: {{ $deployment.name }}-eventbus
         image: {{ $deployment.image }}:{{ $deployment.imageTag }}
+        args: ["event-bus"]
         ports:
         - containerPort: {{ $deployment.port }}
         #livenessProbe:

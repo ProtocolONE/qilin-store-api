@@ -76,13 +76,13 @@ spec:
           - name: MONGO_INITDB_ROOT_USERNAME
             valueFrom:
               secretKeyRef:
-                name: p1auth1-mongo-connection
-                key: MONGO_INITDB_ROOT_USERNAME
+                name: p1qilinstoreapi-qilinstoreapi-env
+                key: QILINSTOREAPI_DATABASE_USER
           - name: MONGO_INITDB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: p1auth1-mongo-connection
-                key: MONGO_INITDB_ROOT_PASSWORD
+                name: p1qilinstoreapi-qilinstoreapi-env
+                key: QILINSTOREAPI_DATABASE_PASSWORD
         ports:
         - containerPort: 27017
         volumeMounts:

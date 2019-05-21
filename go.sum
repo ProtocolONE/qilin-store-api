@@ -2,6 +2,7 @@ github.com/ProtocolONE/qilin-common v0.0.0-20190425174539-bb1d2cd55b05 h1:/Hj1nM
 github.com/ProtocolONE/qilin-common v0.0.0-20190425174539-bb1d2cd55b05/go.mod h1:u8zRc+LYiJlkSkbGO4fiH9c+Ij+n6BykAGPI8CngHss=
 github.com/ProtocolONE/rabbitmq v0.0.0-20190129162844-9f24367e139c h1:jiH5dizqc7/6rM8WJpKbgcVOMMXohKvenUWBhCN2gyI=
 github.com/ProtocolONE/rabbitmq v0.0.0-20190129162844-9f24367e139c/go.mod h1:ZnV4uG7YnB4iU8c8co8XU4w7xL0sGaGEw5d9g1THmwk=
+github.com/bxcodec/faker v2.0.1+incompatible/go.mod h1:BNzfpVdTwnFJ6GtfYTcQu6l6rHShT+veBxNCnjCx5XM=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=

@@ -1,15 +1,15 @@
 {{- $deployment := .Values.backend -}}
-{{- $deploymentName := printf "%s-%s-eventbus" .Release.Name $deployment.name }}
+{{- $deploymentName := printf "%s-%s" .Release.Name $deployment.name }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $deploymentName }}
+  name: {{ $deploymentName }}-eventbus
   labels:
     app: {{ .Chart.Name }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    role: {{ $deployment.role }}
+    role: {{ $deployment.role }}-eventbus
   annotations: 
     released: {{ .Release.Time}}    
 spec:
@@ -19,7 +19,7 @@ spec:
       chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
       release: {{ .Release.Name }}
       heritage: {{ .Release.Service }}
-      role: {{ $deployment.role }}
+      role: {{ $deployment.role }}-eventbus
   replicas: {{ $deployment.replicas }} 
   strategy:
     type: RollingUpdate
@@ -33,7 +33,7 @@ spec:
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
-        role: {{ $deployment.role }}
+        role: {{ $deployment.role }}-eventbus
     spec:
       containers:
       - name: {{ $deployment.name }}-eventbus

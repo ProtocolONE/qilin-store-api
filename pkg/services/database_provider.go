@@ -1,13 +1,14 @@
 package services
 
 import (
+	"net/url"
+	"time"
+
+	"github.com/ProtocolONE/qilin-store-api/pkg/conf"
+	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"go.uber.org/zap"
-	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
-	"github.com/ProtocolONE/qilin-store-api/pkg/conf"
-	"net/url"
-	"time"
 )
 
 type dbProvider struct {
@@ -15,8 +16,6 @@ type dbProvider struct {
 	session    *mgo.Session
 	name       string
 }
-
-
 
 func NewDatabaseProvider(c *conf.DbConfig) (interfaces.DatabaseProvider, error) {
 	zap.L().Info("Creating database provider")
@@ -32,11 +31,12 @@ func NewDatabaseProvider(c *conf.DbConfig) (interfaces.DatabaseProvider, error) 
 	info.Timeout = 10 * time.Second
 
 	session, err := mgo.DialWithInfo(info)
-	if err == nil {
-		session.SetSyncTimeout(1 * time.Minute)
-		session.SetSocketTimeout(1 * time.Minute)
+	if err != nil {
+		return nil, err
 	}
 
+	session.SetSyncTimeout(1 * time.Minute)
+	session.SetSocketTimeout(1 * time.Minute)
 	session.SetMode(mgo.Monotonic, true)
 
 	return &dbProvider{connection: BuildConnString(c), session: session, name: c.Name}, nil

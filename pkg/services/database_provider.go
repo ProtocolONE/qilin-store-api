@@ -25,6 +25,7 @@ func NewDatabaseProvider(c *conf.DbConfig) (interfaces.DatabaseProvider, error) 
 
 	info, err := mgo.ParseURL(BuildConnString(c))
 	if err != nil {
+		zap.L().Error("Failed to build connection string: ", zap.Error(err))
 		return nil, err
 	}
 
@@ -32,6 +33,7 @@ func NewDatabaseProvider(c *conf.DbConfig) (interfaces.DatabaseProvider, error) 
 
 	session, err := mgo.DialWithInfo(info)
 	if err != nil {
+		zap.L().Error("Failed to connect to database: ", zap.Error(err))
 		return nil, err
 	}
 

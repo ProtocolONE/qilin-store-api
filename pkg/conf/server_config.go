@@ -9,7 +9,7 @@ type ServerConfig struct {
 
 type DbConfig struct {
 	Host           string `envconfig:"HOST" required:"false" default:"127.0.0.1"`
-	Name           string `envconfig:"DATABASE" required:"false" default:"auth-one"`
+	Name           string `envconfig:"NAME" required:"false" default:"qilinstoreapi"`
 	User           string `envconfig:"USER" required:"false"`
 	Password       string `envconfig:"PASSWORD" required:"false"`
 	MaxConnections int    `envconfig:"MAX_CONNECTIONS" required:"false" default:"100"`

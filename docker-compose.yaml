@@ -1,0 +1,42 @@
+version: "3.6"
+
+services:
+  qilinstoreapi-mongo:
+    image: mongo:4.1.3
+    container_name: qilinstoreapi-mongo
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - "27017:27017"
+    networks:
+      - p1devnet
+    volumes:
+      - qilinstoreapi-mongo:/data/db
+
+  qilinstoreapi:
+    build: .
+    container_name: qilinstoreapi
+    restart: unless-stopped
+    depends_on:
+      - qilinstoreapi-mongo
+    networks:
+      - p1devnet
+    environment:
+      - QILINSTOREAPI_DB_HOST=qilinstoreapi-mongo
+      - QILINSTOREAPI_DB_NAME=qilinstoreapi
+      - QILINSTOREAPI_DB_USER=root
+      - QILINSTOREAPI_DB_PASSWORD=password
+      - QILINSTOREAPI_BUS_CONNECTION
+      - QILINSTOREAPI_SERVER_PORT=8080
+      - QILINSTOREAPI_SERVER_ALLOW_CREDENTIALS=true
+      - QILINSTOREAPI_SERVER_ALLOW_ORIGINS=*
+      - QILINSTOREAPI_SERVER_DEBUG=true
+
+volumes:
+  qilinstoreapi-mongo:
+    external: true
+networks:
+  p1devnet:
+    external: true

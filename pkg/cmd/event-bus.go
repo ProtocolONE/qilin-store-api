@@ -9,12 +9,12 @@ import (
 )
 
 func init() {
-	serverCmd = &cobra.Command{
+	eventBusCmd := &cobra.Command{
 		Use:   "event-bus",
 		Short: "Run event bus listener",
 		Run:   runEventBus,
 	}
-	command.AddCommand(serverCmd)
+	command.AddCommand(eventBusCmd)
 }
 
 func runEventBus(_ *cobra.Command, _ []string) {

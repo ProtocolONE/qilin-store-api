@@ -1,0 +1,175 @@
+openapi: 3.0.1
+info:
+  title: Account API
+  version: 1.0.0
+tags:
+  - name: "account"
+
+servers:
+  - url: TODO:://add_here
+    description: Master test server
+
+paths:
+  /api/v1/accounts/login:
+    post:
+      summary: authorize user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                social:
+                  type: object
+                  properties:
+                    provider:
+                      type: string
+                      enum:
+                        - facebook
+                        - vk
+                        - twitter
+                    token:
+                      type: string
+                    id:
+                      type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserShort'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+
+  /api/v1/accounts/register:
+    post:
+      summary: Register new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: 'example@test.com'
+                birthdate:
+                  type: string
+                  format: date
+                social:
+                  type: object
+                  properties:
+                    provider:
+                      type: string
+                      enum:
+                        - facebook
+                        - vk
+                        - twitter
+                    token:
+                      type: string
+                    id:
+                      type: string
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserShort'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalError:
+      description: Internal Server Error
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: "Resource with same unique id already exists"
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 422
+            message: "Fields required: 'title, description'"
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    UserShort:
+      type: object
+      properties:
+        user_id:
+          type: string
+        nickname:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        prefered_language:
+          type: string
+          enum:
+            - en
+            - ru
+            - fr
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+security:
+  - bearerAuth: []

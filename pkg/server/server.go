@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/ProtocolONE/authone-jwt-verifier-golang"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"go.uber.org/zap"
@@ -27,6 +28,14 @@ func NewServer(config *conf.Config) (*server, error) {
 	httpServer.Use(middleware.Logger())
 	httpServer.Use(middleware.Recover())
 
+	settings := jwtverifier.Config{
+		ClientID:     config.Auth1.ClientId,
+		ClientSecret: config.Auth1.ClientSecret,
+		Scopes:       []string{"openid", "offline"},
+		RedirectURL:  "",
+		Issuer:       config.Auth1.Issuer,
+	}
+
 	httpServer.HTTPErrorHandler = server.QilinStoreErrorHandler
 
 	dbProvider, err := services.NewDatabaseProvider(config.Db)
@@ -37,7 +46,15 @@ func NewServer(config *conf.Config) (*server, error) {
 	gameService := services.NewGameService(dbProvider)
 
 	apiGroup := httpServer.Group("/api/v1")
+	jwtv := jwtverifier.NewJwtVerifier(settings)
+	apiGroup.Use(AuthOneJwtWithConfig(jwtv))
+
 	if _, err := api.InitGameRouter(apiGroup, gameService); err != nil {
+		return nil, err
+	}
+
+	accountService := services.NewAccountService(dbProvider)
+	if _, err := api.InitAccountRouter(apiGroup, accountService); err != nil {
 		return nil, err
 	}
 

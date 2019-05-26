@@ -7,6 +7,12 @@ type ServerConfig struct {
 	Debug            bool     `envconfig:"DEBUG" required:"false" default:"false"`
 }
 
+type Auth1 struct {
+	Issuer       string `envconfig:"ISSUER" required:"true" default:"https://dev-auth1.tst.protocol.one"`
+	ClientId     string `envconfig:"CLIENTID" required:"true"`
+	ClientSecret string `envconfig:"CLIENTSECRET" required:"true"`
+}
+
 type DbConfig struct {
 	Host           string `envconfig:"HOST" required:"false" default:"127.0.0.1"`
 	Name           string `envconfig:"NAME" required:"false" default:"qilinstoreapi"`

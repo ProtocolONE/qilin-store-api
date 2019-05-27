@@ -33,6 +33,8 @@ backend:
     - QILINSTOREAPI_SERVER_ALLOW_CREDENTIALS
     - QILINSTOREAPI_SERVER_ALLOW_ORIGINS
     - QILINSTOREAPI_SERVER_DEBUG
+    - QILINSTOREAPI_AUTH1_CLIENTID
+    - QILINSTOREAPI_AUTH1_CLIENTSECRET
   
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

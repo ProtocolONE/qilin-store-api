@@ -16,6 +16,7 @@ func AuthOneJwtWithConfig(cfg *jwtverifier.JwtVerifier) echo.MiddlewareFunc {
 		return func(c echo.Context) (err error) {
 			userInfo, err := introspectToken(c, cfg)
 			if err != nil {
+				c.Set("user", nil)
 				return err
 			}
 

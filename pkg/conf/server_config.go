@@ -24,3 +24,10 @@ type DbConfig struct {
 type EventBusConfig struct {
 	Connection string `envconfig:"CONNECTION" required:"true" default:"amqp://127.0.0.1:5672"`
 }
+
+type SessionStorage struct {
+	Host     string `envconfig:"HOST" required:"true" default:"localhost"`
+	Port     int    `envconfig:"PORT" required:"true" default:"6379"`
+	Password string `envconfig:"PASSWORD" required:"false"`
+	Secret   string `envconfig:"SECRET" required:"true" default:"secret"`
+}

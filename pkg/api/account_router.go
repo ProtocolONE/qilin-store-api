@@ -6,8 +6,10 @@ import (
 	"github.com/ProtocolONE/qilin-store-api/pkg/api/mapper"
 	"github.com/ProtocolONE/qilin-store-api/pkg/common"
 	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 	"net/http"
 )
 
@@ -23,8 +25,8 @@ func InitAccountRouter(group *echo.Group, accountService interfaces.AccountServi
 
 	g := group.Group("/accounts")
 	g.Use(checkAuth())
-	g.GET("/login", router.authorize)
-	g.GET("/register", router.register)
+	g.POST("/login", router.authorize)
+	g.POST("/register", router.register)
 
 	return &router, nil
 }
@@ -46,6 +48,19 @@ func (router *AccountRouter) register(ctx echo.Context) error {
 		return err
 	}
 
+	sess, err := session.Get("session", ctx)
+	if err != nil {
+		zap.L().Error("Can't get session", zap.Error(err))
+	} else {
+		sess.Values["email"] = account.Personal.Email
+		sess.Values["user_id"] = account.ID.Hex()
+		sess.Values["nickname"] = account.Account.Nickname
+		err = sess.Save(ctx.Request(), ctx.Response())
+		if err != nil {
+			zap.L().Error("Can't save session", zap.Error(err))
+		}
+	}
+
 	return ctx.JSON(http.StatusCreated, mapper.UserFromModel(account))
 }
 
@@ -64,6 +79,19 @@ func (router *AccountRouter) authorize(ctx echo.Context) error {
 	account, err := router.accountService.Authorize(user.UserID, data)
 	if err != nil {
 		return err
+	}
+
+	sess, err := session.Get("session", ctx)
+	if err != nil {
+		zap.L().Error("Can't get session", zap.Error(err))
+	} else{
+		sess.Values["email"] = account.Personal.Email
+		sess.Values["user_id"] = account.ID.Hex()
+		sess.Values["nickname"] = account.Account.Nickname
+		err = sess.Save(ctx.Request(), ctx.Response())
+		if err != nil {
+			zap.L().Error("Can't save session", zap.Error(err))
+		}
 	}
 
 	return ctx.JSON(http.StatusOK, mapper.UserFromModel(account))

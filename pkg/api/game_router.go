@@ -33,7 +33,7 @@ func (router *GameRouter) getListGames(ctx echo.Context) error {
 		result = append(result, mapper.GameFromModel(&game, "en"))
 	}
 
-	return ctx.JSON(http.StatusOK, result)
+	return ctx.JSON(http.StatusOK, games)
 }
 
 func (router *GameRouter) getGameById(ctx echo.Context) error {

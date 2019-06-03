@@ -41,7 +41,12 @@ type (
 		ID       string `json:"id"`
 	}
 
+	UserMultiFactorDTO struct {
+		ProviderId   string
+		ProviderName string
+	}
+
 	UserSecurityDTO struct {
-		//TODO: дополнить при реализации Логина\Регистрации
+		MFA []UserMultiFactorDTO `json:"mfa"`
 	}
 )

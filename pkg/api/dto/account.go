@@ -37,7 +37,11 @@ type (
 		AdditionalLanguages []string `json:"additional_languages"`
 	}
 
-	LinkAccountDTO struct {
+	UpdateMultiFactorAuthDTO struct {
+		ProviderName string
+		ProviderId   string
+	}
 
+	LinkAccountDTO struct {
 	}
 )

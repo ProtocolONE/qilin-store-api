@@ -1,11 +1,10 @@
 package cmd
 
 import (
-	"fmt"
-	"github.com/spf13/cobra"
-	"go.uber.org/zap"
 	"github.com/ProtocolONE/qilin-store-api/pkg/server"
 	"github.com/ProtocolONE/qilin-store-api/pkg/services"
+	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 func init() {
@@ -31,7 +30,7 @@ func runEventBus(_ *cobra.Command, _ []string) {
 	}
 	defer bus.Shutdown()
 
-	zap.L().Info(fmt.Sprintf("Starting up event bus worker. Connection: %s", cfg.Bus.Connection))
+	zap.L().Info("Starting up event bus worker.")
 	if err = bus.StartListen(); err != nil {
 		zap.L().Fatal("Error running event bus worker", zap.Error(err))
 	}

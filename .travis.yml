@@ -15,7 +15,14 @@ stages:
 jobs:
   include:
   - stage: test
+    services: mongodb
+    env: 
+      - QILINSTOREAPI_DB_NAME=qilin
+      - QILINSTOREAPI_DB_USER=travis
+      - QILINSTOREAPI_DB_PASSWORD=test
     install: true
+    before_script:
+      - mongo qilin --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});' 
     script:
     - go test ./... -coverprofile=coverage.out -covermode=atomic -p=1
     after_success:

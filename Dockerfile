@@ -18,4 +18,4 @@ FROM alpine:3.9
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
 COPY --from=builder /application /application
 
-ENTRYPOINT /application/bin/app server
+CMD /application/bin/app server

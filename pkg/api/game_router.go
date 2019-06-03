@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/ProtocolONE/qilin-store-api/pkg/api/dto"
 	"github.com/ProtocolONE/qilin-store-api/pkg/api/mapper"
 	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
 	"github.com/labstack/echo/v4"
@@ -15,14 +16,24 @@ func InitGameRouter(group *echo.Group, gameService interfaces.GameService) (*Gam
 	router := GameRouter{gameService: gameService}
 
 	g := group.Group("/games")
-	g.GET("/:gameId", router.getGameById)
 	g.GET("/", router.getListGames)
+	g.GET("/:gameId", router.getGameById)
 
 	return &router, nil
 }
 
 func (router *GameRouter) getListGames(ctx echo.Context) error {
-	panic("not implemented yet")
+	games, err := router.gameService.GetListGames("", 0, 0, "")
+	if err != nil {
+		return err
+	}
+
+	var result []*dto.GameDTO
+	for _, game := range games {
+		result = append(result, mapper.GameFromModel(&game, "en"))
+	}
+
+	return ctx.JSON(http.StatusOK, result)
 }
 
 func (router *GameRouter) getGameById(ctx echo.Context) error {

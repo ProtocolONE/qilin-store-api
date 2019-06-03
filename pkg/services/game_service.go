@@ -41,6 +41,17 @@ func (service *gameService) GetById(id string) (*model.Game, error) {
 	return &result, nil
 }
 
-func (gameService) GetListGames(search string, offset int, limit int, order string) ([]*model.Game, error) {
-	panic("implement me")
+func (service *gameService) GetListGames(search string, offset int, limit int, order string) ([]model.Game, error) {
+	db, err := service.db.GetDatabase()
+	if err != nil {
+		return nil, common.NewServiceError(http.StatusInternalServerError, errors.Wrap(err, common.GetDatabaseError))
+	}
+
+	var games []model.Game
+	err = db.C("games").Find(nil).All(&games)
+	if err != nil {
+		return nil, common.NewServiceError(http.StatusInternalServerError, errors.Wrap(err, "Could not get games list"))
+	}
+
+	return games, nil
 }

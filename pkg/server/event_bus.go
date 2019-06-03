@@ -2,20 +2,20 @@ package server
 
 import (
 	"fmt"
+	"github.com/ProtocolONE/qilin-common/pkg/proto"
+	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
+	"github.com/ProtocolONE/qilin-store-api/pkg/model"
 	"github.com/ProtocolONE/rabbitmq/pkg"
 	"github.com/globalsign/mgo/bson"
 	"github.com/streadway/amqp"
 	"go.uber.org/zap"
-	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
-	"github.com/ProtocolONE/qilin-store-api/pkg/model"
-	"github.com/ProtocolONE/qilin-common/pkg/proto"
 	"time"
 )
 
 type eventBus struct {
 	provider interfaces.DatabaseProvider
-	broker *rabbitmq.Broker
-	exit 	chan bool
+	broker   *rabbitmq.Broker
+	exit     chan bool
 }
 
 func NewEventBus(provider interfaces.DatabaseProvider, host string) (interfaces.EventBus, error) {
@@ -35,7 +35,7 @@ func (w *eventBus) StartListen() error {
 		return err
 	}
 
-	w.exit= make(chan bool)
+	w.exit = make(chan bool)
 	err = w.broker.Subscribe(w.exit)
 	if err != nil {
 		return err
@@ -66,30 +66,39 @@ func (w *eventBus) gameChanged(msg *proto.GameObject, d amqp.Delivery) (err erro
 func mapGame(game *proto.GameObject) *model.Game {
 	releaseDate, _ := time.Parse(time.RFC3339, game.ReleaseDate)
 	return &model.Game{
-		QilinID:     game.ID,
-		Title:       game.Title,
-		ReleaseDate: releaseDate,
-		Tags:        mapTags(game.Tags),
-		GenreMain:   mapGenre(game.GenreMain),
-		GenreAddition: mapListGenre(game.Genres),
-		Requirements: mapRequirements(game.Requirements),
-		Platforms: mapPlatforms(game.Platforms),
-		Languages: mapLanguages(game.Languages),
-		Developers: mapLink(game.Developer),
+		QilinID:              game.ID,
+		Title:                game.Title,
+		ReleaseDate:          releaseDate,
+		Tags:                 mapTags(game.Tags),
+		GenreMain:            mapGenre(game.GenreMain),
+		GenreAddition:        mapListGenre(game.Genres),
+		Requirements:         mapRequirements(game.Requirements),
+		Platforms:            mapPlatforms(game.Platforms),
+		Languages:            mapLanguages(game.Languages),
+		Developers:           mapLink(game.Developer),
 		DisplayRemainingTime: game.DisplayRemainingTime,
-		FeaturesCommon: game.Features,
-		FeaturesCtrl: game.FeaturesControl,
+		FeaturesCommon:       game.Features,
+		FeaturesCtrl:         game.FeaturesControl,
 	}
 }
 
 func mapLink(object *proto.LinkObject) model.Link {
+	if object == nil {
+		return model.Link{}
+	}
+
 	return model.Link{
-		ID: object.ID,
+		ID:    object.ID,
 		Title: object.Title,
 	}
 }
 
 func mapLanguages(languages *proto.Languages) model.GameLangs {
+	if languages == nil {
+		zap.L().Error("Languages is empty")
+		return model.GameLangs{}
+	}
+
 	return model.GameLangs{
 		EN: mapLang(languages.EN),
 		IT: mapLang(languages.IT),
@@ -107,50 +116,74 @@ func mapLang(language *proto.Language) model.Langs {
 	}
 
 	return model.Langs{
-		Voice: language.Voice,
+		Voice:     language.Voice,
 		Subtitles: language.Subtitles,
 		Interface: language.Interface,
 	}
 }
 
 func mapPlatforms(platforms *proto.Platforms) model.Platforms {
+	if platforms == nil {
+		zap.L().Error("Platforms is empty")
+		return model.Platforms{}
+	}
+
 	return model.Platforms{
 		Windows: platforms.Windows,
-		Linux: platforms.Linux,
-		MacOs: platforms.MacOs,
+		Linux:   platforms.Linux,
+		MacOs:   platforms.MacOs,
 	}
 }
 
 func mapRequirements(requirements *proto.Requirements) model.GameRequirements {
+	if requirements == nil {
+		zap.L().Error("GameRequirements is empty")
+		return model.GameRequirements{}
+	}
+
 	return model.GameRequirements{
-		MacOs: mapPlatformReq(requirements.MacOs),
-		Linux: mapPlatformReq(requirements.Linux),
+		MacOs:   mapPlatformReq(requirements.MacOs),
+		Linux:   mapPlatformReq(requirements.Linux),
 		Windows: mapPlatformReq(requirements.Windows),
 	}
 }
 
 func mapPlatformReq(requirements *proto.PlatformRequirements) model.PlatformRequirements {
+	if requirements == nil {
+		zap.L().Error("PlatformRequirements is empty")
+		return model.PlatformRequirements{}
+	}
+
 	return model.PlatformRequirements{
 		Recommended: mapMachineReq(requirements.Recommended),
-		Minimal: mapMachineReq(requirements.Minimal),
+		Minimal:     mapMachineReq(requirements.Minimal),
 	}
 }
 
 func mapMachineReq(requirements *proto.MachineRequirements) model.MachineRequirements {
+	if requirements == nil {
+		zap.L().Error("MachineRequirements is empty")
+		return model.MachineRequirements{}
+	}
+
 	return model.MachineRequirements{
 		StorageDimension: requirements.StorageDimension,
-		Storage: requirements.Storage,
-		Sound: requirements.Sound,
-		Ram: requirements.Ram,
-		RamDimension: requirements.RamDimension,
-		Processor: requirements.Processor,
-		Other: requirements.Other,
-		Graphics: requirements.Graphics,
-		System: requirements.System,
+		Storage:          requirements.Storage,
+		Sound:            requirements.Sound,
+		Ram:              requirements.Ram,
+		RamDimension:     requirements.RamDimension,
+		Processor:        requirements.Processor,
+		Other:            requirements.Other,
+		Graphics:         requirements.Graphics,
+		System:           requirements.System,
 	}
 }
 
 func mapListGenre(objects []*proto.TagObject) []model.GameGenre {
+	if objects == nil {
+		return nil
+	}
+
 	var result []model.GameGenre
 	for _, object := range objects {
 		result = append(result, mapGenre(object))
@@ -159,6 +192,10 @@ func mapListGenre(objects []*proto.TagObject) []model.GameGenre {
 }
 
 func mapGenre(genre *proto.TagObject) model.GameGenre {
+	if genre == nil {
+		return model.GameGenre{}
+	}
+
 	return model.GameGenre{
 		Name: mapLocalizedString(genre.Name),
 		ID:   genre.ID,
@@ -166,6 +203,10 @@ func mapGenre(genre *proto.TagObject) model.GameGenre {
 }
 
 func mapTags(tags []*proto.TagObject) []model.GameTag {
+	if tags == nil {
+		return nil
+	}
+
 	var res []model.GameTag
 	for _, tag := range tags {
 		res = append(res, mapTag(tag))
@@ -174,10 +215,17 @@ func mapTags(tags []*proto.TagObject) []model.GameTag {
 }
 
 func mapTag(tag *proto.TagObject) model.GameTag {
+	if tag == nil {
+		return model.GameTag{}
+	}
 	return model.GameTag{ID: tag.ID, Name: mapLocalizedString(tag.Name)}
 }
 
 func mapLocalizedString(s *proto.LocalizedString) model.LocalizedString {
+	if s == nil {
+		return model.LocalizedString{}
+	}
+
 	return model.LocalizedString{
 		EN: s.EN,
 		RU: s.RU,

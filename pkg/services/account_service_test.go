@@ -26,18 +26,18 @@ func Test_AccountService(t *testing.T) {
 func (suite *AccountServiceTestSuite) SetupTest() {
 	cfg, err := conf.GetConfig()
 	if err != nil {
-		suite.FailNow("Config load failed")
+		suite.FailNow("Config load failed", err.Error())
 	}
 
 	dbProvider, err := NewDatabaseProvider(cfg.Db)
 	if err != nil {
-		suite.FailNow("Can't get db provider")
+		suite.FailNow("Can't get db provider", err.Error())
 	}
 
 	db, err := dbProvider.GetDatabase()
 
 	if err != nil {
-		suite.FailNow("Can't get database")
+		suite.FailNow("Can't get database", err.Error())
 	}
 
 	service := &accountService{

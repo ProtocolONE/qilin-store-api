@@ -45,13 +45,19 @@ func (w *eventBus) StartListen() error {
 }
 
 func (w *eventBus) Shutdown() {
+	zap.L().Info("Shutdown called")
 	w.exit <- true
 }
 
 func (w *eventBus) gameChanged(msg *proto.GameObject, d amqp.Delivery) (err error) {
-	zap.L().Debug(fmt.Sprintf("new gameChanged message `%v`", msg))
+	zap.L().Info(fmt.Sprintf("new gameChanged message `%v`", msg))
 
 	db, err := w.provider.GetDatabase()
+
+	if err != nil {
+		zap.L().Error("Can't get db", zap.Error(err))
+		return err
+	}
 
 	game := mapGame(msg)
 	_, err = db.C("games").Upsert(bson.M{"qilin_id": game.QilinID}, game)

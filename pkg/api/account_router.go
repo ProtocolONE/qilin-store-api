@@ -28,7 +28,14 @@ func InitAccountRouter(group *echo.Group, accountService interfaces.AccountServi
 	g.POST("/login", router.authorize)
 	g.POST("/register", router.register)
 
+	g.GET("/", router.getAccountInfo)
+
 	return &router, nil
+}
+
+func (router *AccountRouter) getAccountInfo(ctx echo.Context) error {
+	user := ctx.Get(userField).(*jwtverifier.UserInfo)
+
 }
 
 func (router *AccountRouter) register(ctx echo.Context) error {

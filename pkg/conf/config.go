@@ -8,17 +8,18 @@ import (
 
 // Config the application's configuration
 type Config struct {
-	Auth1  *Auth1
-	Server *ServerConfig
-	Db     *DbConfig
-	Bus    *EventBusConfig
+	Auth1    *Auth1
+	Server   *ServerConfig
+	Db       *DbConfig
+	Bus      *EventBusConfig
+	Sessions *SessionStorage
 }
 
 func GetConfig() (*Config, error) {
 	cfg := &Config{}
 	if err := envconfig.Process("QILINSTOREAPI", cfg); err != nil {
-	 	zap.L().Error(fmt.Sprintf("Config init failed with error: %s\n", err))
-	 	return nil, err
+		zap.L().Error(fmt.Sprintf("Config init failed with error: %s\n", err))
+		return nil, err
 	}
 	return cfg, nil
 }

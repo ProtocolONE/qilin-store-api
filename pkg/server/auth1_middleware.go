@@ -20,7 +20,10 @@ func AuthOneJwtWithConfig(cfg *jwtverifier.JwtVerifier) echo.MiddlewareFunc {
 				return err
 			}
 
-			c.Set("user", userInfo)
+			if userInfo != nil {
+				c.Set("user", userInfo)
+			}
+
 			return next(c)
 		}
 	}

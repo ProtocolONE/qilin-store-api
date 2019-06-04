@@ -92,6 +92,11 @@ func NewServer(config *conf.Config) (*server, error) {
 		return nil, err
 	}
 
+	profileService := services.NewProfileService(dbProvider)
+	if _, err := api.InitProfileRouter(apiGroup, profileService); err != nil {
+		return nil, err
+	}
+
 	return server, nil
 }
 

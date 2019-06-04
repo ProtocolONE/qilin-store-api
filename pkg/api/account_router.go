@@ -28,103 +28,7 @@ func InitAccountRouter(group *echo.Group, accountService interfaces.AccountServi
 	g.POST("/login", router.authorize)
 	g.POST("/register", router.register)
 
-	g.GET("/:userId", router.getAccountInfo)
-	g.PUT("/:userId", router.updateAccountInfo)
-
-	g.POST("/:userId/mfa", router.addMFA)
-	g.DELETE("/:userId/mfa/:providerId", router.removeMFA)
-
 	return &router, nil
-}
-
-func (router *AccountRouter) addMFA(ctx echo.Context) error {
-	user := ctx.Get(userField).(*jwtverifier.UserInfo)
-
-	userId := ctx.Param("id")
-
-	if userId != user.UserID {
-		return common.NewServiceError(http.StatusForbidden, "User id mismatch")
-	}
-
-	data := dto.UpdateMultiFactorAuthDTO{}
-	if err := ctx.Bind(data); err != nil {
-		return common.NewServiceError(http.StatusBadRequest, errors.Wrap(err, "Binding to dto"))
-	}
-
-	if err := ctx.Validate(data); err != nil {
-		return common.NewServiceError(http.StatusUnprocessableEntity, errors.Wrap(err, "Validation failed"))
-	}
-
-	account, err := router.accountService.AddMFA(userId, data.ProviderId, data.ProviderName)
-	if err != nil {
-		return err
-	}
-
-	return ctx.JSON(http.StatusOK, mapper.UserFromModel(account))
-}
-
-func (router *AccountRouter) removeMFA(ctx echo.Context) error {
-	user := ctx.Get(userField).(*jwtverifier.UserInfo)
-	userId := ctx.Param("id")
-
-	if userId != user.UserID {
-		return common.NewServiceError(http.StatusForbidden, "User id mismatch")
-	}
-
-	providerId := ctx.Param("providerId")
-	if len(providerId) == 0 {
-		return common.NewServiceError(http.StatusBadRequest, "Provider Id must be set")
-	}
-
-	account, err := router.accountService.RemoveMFA(userId, providerId)
-	if err != nil {
-		return err
-	}
-
-	return ctx.JSON(http.StatusOK, mapper.UserFromModel(account))
-}
-
-func (router *AccountRouter) updateAccountInfo(ctx echo.Context) error {
-	user := ctx.Get(userField).(*jwtverifier.UserInfo)
-
-	userId := ctx.Param("id")
-
-	if userId != user.UserID {
-		return common.NewServiceError(http.StatusForbidden, "User id mismatch")
-	}
-
-	data := dto.UpdateUserDTO{}
-	if err := ctx.Bind(data); err != nil {
-		return common.NewServiceError(http.StatusBadRequest, errors.Wrap(err, "Binding to dto"))
-	}
-
-	if err := ctx.Validate(data); err != nil {
-		return common.NewServiceError(http.StatusUnprocessableEntity, errors.Wrap(err, "Validation failed"))
-	}
-
-	account, err := router.accountService.UpdateAccount(userId, data)
-	if err != nil {
-		return err
-	}
-
-	return ctx.JSON(http.StatusOK, mapper.UserFromModel(account))
-}
-
-func (router *AccountRouter) getAccountInfo(ctx echo.Context) error {
-	user := ctx.Get(userField).(*jwtverifier.UserInfo)
-
-	userId := ctx.Param("id")
-
-	if userId != user.UserID {
-		return common.NewServiceError(http.StatusForbidden, "User id mismatch")
-	}
-
-	account, err := router.accountService.GetAccount(userId)
-	if err != nil {
-		return err
-	}
-
-	return ctx.JSON(http.StatusOK, mapper.UserFromModel(account))
 }
 
 func (router *AccountRouter) register(ctx echo.Context) error {
@@ -197,12 +101,14 @@ func checkAuth() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 			user := c.Get(userField)
+
 			if user == nil {
 				return &echo.HTTPError{
 					Code:    http.StatusUnauthorized,
 					Message: errorAuthFailed,
 				}
 			}
+
 			return next(c)
 		}
 	}

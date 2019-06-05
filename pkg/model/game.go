@@ -69,9 +69,9 @@ type (
 	}
 
 	GameRequirements struct {
-		Windows PlatformRequirements `json:"windows"`
-		MacOs   PlatformRequirements `json:"mac_os"`
-		Linux   PlatformRequirements `json:"linux"`
+		Windows *PlatformRequirements `json:"windows"`
+		MacOs   *PlatformRequirements `json:"mac_os"`
+		Linux   *PlatformRequirements `json:"linux"`
 	}
 
 	Platforms struct {
@@ -109,3 +109,4 @@ type (
 		Twitter  string
 	}
 )
+

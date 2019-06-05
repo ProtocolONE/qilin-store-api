@@ -154,13 +154,12 @@ func mapRequirements(requirements *proto.Requirements) model.GameRequirements {
 	}
 }
 
-func mapPlatformReq(requirements *proto.PlatformRequirements) model.PlatformRequirements {
+func mapPlatformReq(requirements *proto.PlatformRequirements) *model.PlatformRequirements {
 	if requirements == nil {
-		zap.L().Error("PlatformRequirements is empty")
-		return model.PlatformRequirements{}
+		return nil
 	}
 
-	return model.PlatformRequirements{
+	return &model.PlatformRequirements{
 		Recommended: mapMachineReq(requirements.Recommended),
 		Minimal:     mapMachineReq(requirements.Minimal),
 	}

@@ -48,8 +48,10 @@ func (provider *dbProvider) GetDatabase() (*mgo.Database, error) {
 	return provider.session.DB(provider.name), nil
 }
 
-func (dbProvider) Shutdown() {
-	//TODO
+func (provider *dbProvider) Shutdown() {
+	if provider.session != nil {
+		provider.session.Close()
+	}
 }
 
 func BuildConnString(c *conf.DbConfig) string {

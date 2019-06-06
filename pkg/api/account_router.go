@@ -34,12 +34,12 @@ func InitAccountRouter(group *echo.Group, accountService interfaces.AccountServi
 func (router *AccountRouter) register(ctx echo.Context) error {
 	user := ctx.Get(userField).(*jwtverifier.UserInfo)
 
-	data := &dto.RegisterAccountDTO{}
-	if err := ctx.Bind(data); err != nil {
+	data := dto.RegisterAccountDTO{}
+	if err := ctx.Bind(&data); err != nil {
 		return common.NewServiceError(http.StatusBadRequest, errors.Wrap(err, "Binding to dto"))
 	}
 
-	if err := ctx.Validate(data); err != nil {
+	if err := ctx.Validate(&data); err != nil {
 		return common.NewServiceError(http.StatusUnprocessableEntity, errors.Wrap(err, "Validation failed"))
 	}
 
@@ -67,12 +67,12 @@ func (router *AccountRouter) register(ctx echo.Context) error {
 func (router *AccountRouter) authorize(ctx echo.Context) error {
 	user := ctx.Get(userField).(*jwtverifier.UserInfo)
 
-	data := &dto.AuthorizeAccountDTO{}
-	if err := ctx.Bind(data); err != nil {
+	data := dto.AuthorizeAccountDTO{}
+	if err := ctx.Bind(&data); err != nil {
 		return common.NewServiceError(http.StatusBadRequest, errors.Wrap(err, "Binding to dto"))
 	}
 
-	if err := ctx.Validate(data); err != nil {
+	if err := ctx.Validate(&data); err != nil {
 		return common.NewServiceError(http.StatusUnprocessableEntity, errors.Wrap(err, "Validation failed"))
 	}
 
@@ -101,12 +101,14 @@ func checkAuth() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 			user := c.Get(userField)
+
 			if user == nil {
 				return &echo.HTTPError{
 					Code:    http.StatusUnauthorized,
 					Message: errorAuthFailed,
 				}
 			}
+
 			return next(c)
 		}
 	}

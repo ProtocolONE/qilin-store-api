@@ -13,17 +13,17 @@ import (
 	"testing"
 )
 
-type AccountServiceTestSuite struct {
+type ProfileServiceTestSuite struct {
 	suite.Suite
 	db      *mgo.Database
-	service interfaces.AccountService
+	service interfaces.ProfileService
 }
 
-func Test_AccountService(t *testing.T) {
-	suite.Run(t, new(AccountServiceTestSuite))
+func Test_ProfileService(t *testing.T) {
+	suite.Run(t, new(ProfileServiceTestSuite))
 }
 
-func (suite *AccountServiceTestSuite) SetupTest() {
+func (suite *ProfileServiceTestSuite) SetupTest() {
 	cfg, err := conf.GetConfig()
 	if err != nil {
 		suite.FailNow("Config load failed", err.Error())
@@ -40,7 +40,7 @@ func (suite *AccountServiceTestSuite) SetupTest() {
 		suite.FailNow("Can't get database", err.Error())
 	}
 
-	service := &accountService{
+	service := &profileService{
 		db: dbProvider,
 	}
 
@@ -48,43 +48,61 @@ func (suite *AccountServiceTestSuite) SetupTest() {
 	suite.service = service
 }
 
-func (suite *AccountServiceTestSuite) TearDownTest() {
+func (suite *ProfileServiceTestSuite) TearDownTest() {
 	err := suite.db.DropDatabase()
 	if err != nil {
 		suite.Error(err)
 	}
 }
 
-func (suite *AccountServiceTestSuite) TestAccountService_Register() {
+func (suite *ProfileServiceTestSuite) TestAccountService_GetAccount() {
 	shouldBe := require.New(suite.T())
 	service := suite.service
 	db := suite.db
-	user, err := service.Register(bson.NewObjectId().Hex(), dto.RegisterAccountDTO{Email: "test@email.com"})
-	shouldBe.Nil(err)
-	shouldBe.NotNil(user)
-	shouldBe.Equal("test@email.com", user.Personal.Email)
 
 	userId := bson.NewObjectId()
-	shouldBe.Nil(db.C("accounts").Insert(&model.User{ID: userId}))
-	user, err = service.Register(userId.Hex(), dto.RegisterAccountDTO{})
-	shouldBe.Nil(user)
-	shouldBe.NotNil(err)
-	shouldBe.Equal(409, err.(*common.ServiceError).Code)
-}
-
-func (suite *AccountServiceTestSuite) TestAccountService_Authorize() {
-	shouldBe := require.New(suite.T())
-	service := suite.service
-	db := suite.db
-
-	user, err := service.Authorize(bson.NewObjectId().Hex(), dto.AuthorizeAccountDTO{})
+	user, err := service.GetAccount(userId.Hex())
 	shouldBe.Nil(user)
 	shouldBe.NotNil(err)
 	shouldBe.Equal(404, err.(*common.ServiceError).Code)
 
-	userId := bson.NewObjectId()
 	shouldBe.Nil(db.C("accounts").Insert(&model.User{ID: userId}))
-	user, err = service.Authorize(userId.Hex(), dto.AuthorizeAccountDTO{})
+	user, err = service.GetAccount(userId.Hex())
+	shouldBe.Nil(err)
+	shouldBe.NotNil(user)
+}
+
+func (suite *ProfileServiceTestSuite) TestAccountService_UpdateAccount() {
+	shouldBe := require.New(suite.T())
+	service := suite.service
+	db := suite.db
+
+	userId := bson.NewObjectId()
+	updateDto := dto.UpdateUserDTO{
+		Account: dto.UpdateAccountDTO{
+			Nickname:        "test",
+			PrimaryLanguage: "en",
+			AdditionalLanguages: []string{
+				"ru",
+				"fr",
+			},
+		},
+		Personal: dto.UpdatePersonalDTO{
+			FirstName: "FirstName",
+			LastName:  "LastName",
+		},
+	}
+	user, err := service.UpdateAccount(userId.Hex(), updateDto)
+	shouldBe.Nil(user)
+	shouldBe.NotNil(err)
+	shouldBe.Equal(404, err.(*common.ServiceError).Code)
+
+	insertUser := &model.User{
+		ID: userId,
+	}
+	shouldBe.Nil(db.C("accounts").Insert(insertUser))
+
+	user, err = service.UpdateAccount(userId.Hex(), updateDto)
 	shouldBe.Nil(err)
 	shouldBe.NotNil(user)
 }

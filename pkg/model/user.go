@@ -44,6 +44,11 @@ type (
 	}
 
 	UserSecurity struct {
-		//TODO: дополнить при реализации Логина\Регистрации
+		MFA []UserMFA `json:"mfa"`
+	}
+
+	UserMFA struct {
+		ProviderId   string
+		ProviderName string
 	}
 )

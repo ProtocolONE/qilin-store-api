@@ -6,6 +6,6 @@ import (
 )
 
 type AccountService interface {
-	Authorize(userId string, authorize *dto.AuthorizeAccountDTO) (*model.User, error)
-	Register(userId string, register *dto.RegisterAccountDTO) (*model.User, error)
+	Authorize(userId string, authorize dto.AuthorizeAccountDTO) (*model.User, error)
+	Register(userId string, register dto.RegisterAccountDTO) (*model.User, error)
 }

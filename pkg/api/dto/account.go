@@ -4,7 +4,7 @@ import "time"
 
 type (
 	AuthorizeAccountDTO struct {
-		Social    *RegisterSocialDTO `json:"social"`
+		Social *RegisterSocialDTO `json:"social"`
 	}
 
 	RegisterAccountDTO struct {
@@ -17,5 +17,31 @@ type (
 		Provider string `json:"provider"`
 		Token    string `json:"token"`
 		Id       string `json:"id"`
+	}
+
+	UpdateUserDTO struct {
+		Personal UpdatePersonalDTO `json:"personal"`
+		Account  UpdateAccountDTO  `json:"account"`
+	}
+
+	UpdatePersonalDTO struct {
+		FirstName string         `json:"first_name"`
+		LastName  string         `json:"last_name"`
+		BirthDate *time.Time     `json:"birth_date"`
+		Address   UserAddressDTO `json:"address"`
+	}
+
+	UpdateAccountDTO struct {
+		Nickname            string   `json:"nickname"`
+		PrimaryLanguage     string   `json:"primary_language"`
+		AdditionalLanguages []string `json:"additional_languages"`
+	}
+
+	UpdateMultiFactorAuthDTO struct {
+		ProviderName string
+		ProviderId   string
+	}
+
+	LinkAccountDTO struct {
 	}
 )

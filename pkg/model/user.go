@@ -10,7 +10,6 @@ type (
 		ID       bson.ObjectId       `json:"id" bson:"_id,omitempty"`
 		Personal PersonalInformation `json:"personal"`
 		Account  UserAccount         `json:"account"`
-		Security *UserSecurity       `json:"security"`
 	}
 
 	PersonalInformation struct {
@@ -38,17 +37,7 @@ type (
 	}
 
 	UserSocialAccount struct {
-		//TODO: узнать какую именно информацию мы здесь держим. Токен, айди пользователя, ник?
 		Provider string `json:"provider"` // Facebook, twitter, Vk, etc.
 		ID       string `json:"id"`
-	}
-
-	UserSecurity struct {
-		MFA []UserMFA `json:"mfa"`
-	}
-
-	UserMFA struct {
-		ProviderId   string
-		ProviderName string
 	}
 )

@@ -13,18 +13,55 @@ import (
 
 type ProfileRouter struct {
 	profileService interfaces.ProfileService
+	mfaService     interfaces.MfaService
 }
 
-func InitProfileRouter(group *echo.Group, service interfaces.ProfileService) (*ProfileRouter, error) {
-	router := ProfileRouter{profileService: service}
+func InitProfileRouter(group *echo.Group, service interfaces.ProfileService, mfa interfaces.MfaService) (*ProfileRouter, error) {
+	router := ProfileRouter{profileService: service, mfaService: mfa}
 
 	g := group.Group("/profiles")
 	g.Use(checkAuth())
 
 	g.GET("/me", router.getAccountInfo)
 	g.PUT("/me", router.updateAccountInfo)
+	g.DELETE("/me/mfa/:providerId", router.removeMfa)
+	g.POST("/me/mfa/", router.addMfa)
 
 	return &router, nil
+}
+
+func (router *ProfileRouter) addMfa(ctx echo.Context) error {
+	user := ctx.Get(userField).(*jwtverifier.UserInfo)
+
+	providerId := ctx.Param("providerId")
+
+	if len(providerId) == 0 {
+		return common.NewServiceError(http.StatusBadRequest, "Provider Id is empty")
+	}
+
+	err := router.mfaService.Add(user.UserID, providerId)
+	if err != nil {
+		return err
+	}
+
+	return ctx.NoContent(http.StatusOK)
+}
+
+func (router *ProfileRouter) removeMfa(ctx echo.Context) error {
+	user := ctx.Get(userField).(*jwtverifier.UserInfo)
+
+	providerId := ctx.Param("providerId")
+
+	if len(providerId) == 0 {
+		return common.NewServiceError(http.StatusBadRequest, "Provider Id is empty")
+	}
+
+	err := router.mfaService.Remove(user.UserID, providerId)
+	if err != nil {
+		return err
+	}
+
+	return ctx.NoContent(http.StatusOK)
 }
 
 func (router *ProfileRouter) updateAccountInfo(ctx echo.Context) error {
@@ -55,5 +92,29 @@ func (router *ProfileRouter) getAccountInfo(ctx echo.Context) error {
 		return err
 	}
 
-	return ctx.JSON(http.StatusOK, mapper.UserFromModel(account))
+	data := mapper.UserFromModel(account)
+
+	providers, err := router.mfaService.List(user.UserID)
+	if err != nil {
+		return err
+	}
+
+	if providers != nil {
+		data.Security = &dto.UserSecurityDTO{
+			MFA: mapProviders(providers),
+		}
+	}
+
+	return ctx.JSON(http.StatusOK, data)
+}
+
+func mapProviders(providers []dto.MfaProviderDTO) []dto.UserMultiFactorDTO {
+	var result []dto.UserMultiFactorDTO
+	for _, provider := range providers {
+		result = append(result, dto.UserMultiFactorDTO{
+			ProviderId:   provider.ID,
+			ProviderName: provider.Name,
+		})
+	}
+	return result
 }

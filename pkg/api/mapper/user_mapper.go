@@ -11,32 +11,7 @@ func UserFromModel(user *model.User) *dto.UserDTO {
 		ID:       user.ID.Hex(),
 		Account:  userAccountFromModel(user.Account),
 		Personal: userPersonalFromModel(user.Personal),
-		Security: userSecurityFromModel(user.Security),
 	}
-}
-
-func userSecurityFromModel(security *model.UserSecurity) *dto.UserSecurityDTO {
-	if security == nil {
-		return nil
-	}
-	return &dto.UserSecurityDTO{
-		MFA: userMultiFactorFromModel(security.MFA),
-	}
-}
-
-func userMultiFactorFromModel(mfa []model.UserMFA) []dto.UserMultiFactorDTO {
-	if mfa == nil {
-		return nil
-	}
-
-	var result []dto.UserMultiFactorDTO
-	for _, provider := range mfa {
-		result = append(result, dto.UserMultiFactorDTO{
-			ProviderName: provider.ProviderName,
-			ProviderId:   provider.ProviderId,
-		})
-	}
-	return result
 }
 
 func userPersonalFromModel(personal model.PersonalInformation) dto.PersonalInformationDTO {

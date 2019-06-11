@@ -18,10 +18,20 @@ func TestUserFromModel(t *testing.T) {
 
 	userDto := UserFromModel(&user)
 
-	userJson, err := json.Marshal(user)
-	shouldBe.Nil(err)
-	dtoJson, err := json.Marshal(userDto)
+	shouldBeEqual(t, userDto.ID, user.ID)
+	shouldBeEqual(t, user.Personal, userDto.Personal)
+	shouldBeEqual(t, user.Account, userDto.Account)
+}
+
+func shouldBeEqual(t *testing.T, first interface{}, second interface{}) {
+	t.Helper()
+	shouldBe := require.New(t)
+
+	fJson, err := json.Marshal(first)
 	shouldBe.Nil(err)
 
-	shouldBe.JSONEq(string(userJson), string(dtoJson))
+	sJson, err := json.Marshal(second)
+	shouldBe.Nil(err)
+
+	shouldBe.JSONEq(string(fJson), string(sJson))
 }

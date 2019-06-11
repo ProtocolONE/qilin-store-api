@@ -6,7 +6,7 @@ tags:
   - name: "account"
 
 servers:
-  - url: TODO:://add_here
+  - url: https://qilinstoreapi.tst.protocol.one
     description: Master test server
 
 paths:
@@ -89,6 +89,80 @@ paths:
         403:
           $ref: '#/components/responses/Forbidden'
 
+  /api/v1/profiles/me:
+    get:
+      summary: Retrives profile info
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+    put:
+      summary: Retrives profile info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                personal:
+                  type: object
+                  properties:
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    birth_date:
+                      type: string
+                    address:
+                      type: object
+                      properties:
+                        country:
+                          type: string
+                        city:
+                          type: string
+                        postal_code:
+                          type: string
+                        region:
+                          type: string
+                        line_1:
+                          type: string
+                        line_2:
+                          type: string
+                account:
+                  type: object
+                  properties:
+                    nickname:
+                      type: string
+                    primary_language:
+                      type: string
+                    additional_languages:
+                      type: array
+                      items:
+                        type: string
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+
+
 components:
   securitySchemes:
     bearerAuth:
@@ -143,6 +217,73 @@ components:
             $ref: '#/components/schemas/Error'
 
   schemas:
+    Profile:
+      type: object
+      properties:
+        id:
+          type: string
+        personal:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            first_name:
+              type: string
+            last_name:
+              type: string
+            birth_date:
+              type: string
+              format: date
+            address:
+              type: object
+              properties:
+                country:
+                  type: string
+                city:
+                  type: string
+                postal_code:
+                  type: string
+                region:
+                  type: string
+                line_1:
+                  type: string
+                line_2:
+                  type: string
+        account:
+          type: object
+          properties:
+            nickname:
+              type: string
+            primary_language:
+              type: string
+            additional_languages:
+              type: array
+              items:
+                type: string
+            socials:
+              type: array
+              items:
+                type: object
+                properties:
+                  provider:
+                    type: string
+                  id:
+                    type: string
+            security:
+              type: object
+              properties:
+                mfa:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      provider_id:
+                        type: string
+                      provider_name:
+                        type: string
+
+
     UserShort:
       type: object
       properties:

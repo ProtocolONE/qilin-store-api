@@ -42,8 +42,8 @@ type (
 	}
 
 	UserMultiFactorDTO struct {
-		ProviderId   string
-		ProviderName string
+		ProviderId   string `json:"provider_id"`
+		ProviderName string `json:"provider_name"`
 	}
 
 	UserSecurityDTO struct {

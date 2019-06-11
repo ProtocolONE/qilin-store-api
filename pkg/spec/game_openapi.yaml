@@ -10,7 +10,7 @@ tags:
     description: "About games info"
 
 servers:
-  - url: TODO:://add_here
+  - url: https://qilinstoreapi.tst.protocol.one
     description: Master test server
 
 paths:

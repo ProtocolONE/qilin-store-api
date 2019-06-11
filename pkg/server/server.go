@@ -51,6 +51,14 @@ func NewServer(config *conf.Config) (*server, error) {
 		Issuer:       config.Auth1.Issuer,
 	}
 
+	httpServer.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		ExposeHeaders:    []string{"x-centrifugo-token", "x-items-count"},
+		AllowHeaders:     []string{"authorization", "content-type"},
+		AllowOrigins:     config.Server.AllowOrigins,
+		AllowCredentials: config.Server.AllowCredentials,
+	}))
+	httpServer.Pre(middleware.RemoveTrailingSlash())
+
 	httpServer.HTTPErrorHandler = server.QilinStoreErrorHandler
 
 	validate := validator.New()

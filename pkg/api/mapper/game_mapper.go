@@ -35,6 +35,18 @@ func GameFromModel(game *model.Game, lng string) *dto.GameDTO {
 		ReleaseDate:  game.ReleaseDate.Format(time.RFC3339),
 		Platforms:    PlatformsFromModel(game.Platforms),
 		Requirements: RequirementsFromModel(game.Requirements, game.Languages),
+		Media:        MediaFromModel(game.Media, lng),
+	}
+}
+
+func MediaFromModel(media *model.Media, lng string) dto.MediaDTO {
+	if media == nil {
+		return dto.MediaDTO{}
+	}
+
+	return dto.MediaDTO{
+		Screenshots: media.Screenshots.GetValueOrDefault(lng),
+		Trailers:    media.Trailers.GetValueOrDefault(lng),
 	}
 }
 
@@ -42,7 +54,6 @@ func RequirementsFromModel(requirements model.GameRequirements, langs model.Game
 	req := dto.GameRequirementsDTO{}
 
 	req.Systems = map[string]dto.SystemsDTO{}
-
 
 	if requirements.MacOs != nil {
 		req.Systems["mac_os"] = dto.SystemsDTO{

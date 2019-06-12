@@ -85,6 +85,90 @@ func mapGame(game *proto.GameObject) *model.Game {
 		DisplayRemainingTime: game.DisplayRemainingTime,
 		FeaturesCommon:       game.Features,
 		FeaturesCtrl:         game.FeaturesControl,
+		Media:                mapMedia(game.Media),
+		Ratings:              mapRatings(game.Ratings),
+		Description:          mapLocalizedString(game.Description),
+		Tagline:              mapLocalizedString(game.Tagline),
+		Reviews:              mapReviews(game.Reviews),
+		Publishers:           mapLink(game.Publisher),
+	}
+}
+
+func mapReviews(reviews []*proto.Review) []model.GameReview {
+	if reviews == nil {
+		return nil
+	}
+
+	var result []model.GameReview
+	for _, review := range reviews {
+		result = append(result, model.GameReview{
+			Link:      review.Link,
+			Score:     review.Score,
+			Quote:     review.Quote,
+			PressName: review.PressName,
+		})
+	}
+
+	return result
+}
+
+func mapRatings(ratings *proto.Ratings) *model.Ratings {
+	if ratings == nil {
+		return nil
+	}
+
+	return &model.Ratings{
+		BBFC: mapCommonRating(ratings.BBFC),
+		CERO: mapCommonRating(ratings.CERO),
+		ESRB: mapCommonRating(ratings.ESRB),
+		PEGI: mapCommonRating(ratings.PEGI),
+		USK:  mapCommonRating(ratings.USK),
+	}
+}
+
+func mapCommonRating(info *proto.RatingInfo) model.GameRating {
+	if info == nil {
+		return model.GameRating{}
+	}
+
+	return model.GameRating{
+		AgeRestrict:         info.AgeRestrict,
+		DisplayOnlineNotice: info.DisplayOnlineNotice,
+		Rating:              info.Rating,
+		ShowAgeRestrict:     info.ShowAgeRestrict,
+	}
+}
+
+func mapMedia(media *proto.Media) *model.Media {
+	if media == nil {
+		return nil
+	}
+
+	return &model.Media{
+		CapsuleGeneric: mapLocalizedString(media.CapsuleGeneric),
+		CapsuleSmall:   mapLocalizedString(media.CapsuleSmall),
+		CoverImage:     mapLocalizedString(media.CoverImage),
+		CoverVideo:     mapLocalizedString(media.CapsuleGeneric),
+		Friends:        mapLocalizedString(media.Friends),
+		Screenshots:    mapLocalizedStringArray(media.Screenshots),
+		Special:        mapLocalizedString(media.Special),
+		Trailers:       mapLocalizedStringArray(media.Trailers),
+	}
+}
+
+func mapLocalizedStringArray(array *proto.LocalizedStringArray) model.LocalizedStringArray {
+	if array == nil {
+		return model.LocalizedStringArray{}
+	}
+
+	return model.LocalizedStringArray{
+		EN: array.EN,
+		ES: array.ES,
+		DE: array.DE,
+		FR: array.FR,
+		RU: array.RU,
+		IT: array.IT,
+		PT: array.PT,
 	}
 }
 

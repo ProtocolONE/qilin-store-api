@@ -2,7 +2,7 @@ module github.com/ProtocolONE/qilin-store-api
 
 require (
 	github.com/ProtocolONE/authone-jwt-verifier-golang v0.0.0-20190513203152-1161efaef986
-	github.com/ProtocolONE/qilin-common v0.0.0-20190425174539-bb1d2cd55b05
+	github.com/ProtocolONE/qilin-common v0.0.0-20190612131602-2a1edd55e5c2
 	github.com/ProtocolONE/rabbitmq v0.0.0-20190129162844-9f24367e139c
 	github.com/bxcodec/faker v2.0.1+incompatible
 	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8

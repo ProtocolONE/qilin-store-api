@@ -25,6 +25,37 @@ type (
 		GenreAddition        []GameGenre      `json:"genre_addition"`
 		Tags                 []GameTag        `json:"tags"`
 		Previews             LocalizedString  `json:"previews"`
+		Media                *Media           `json:"media"`
+		Ratings              *Ratings         `json:"ratings"`
+		Description          LocalizedString  `json:"description"`
+		Tagline              LocalizedString  `json:"tagline"`
+		Reviews              []GameReview     `json:"reviews"`
+	}
+
+	Ratings struct {
+		PEGI GameRating `json:"pegi"`
+		BBFC GameRating `json:"bbfc"`
+		CERO GameRating `json:"cero"`
+		ESRB GameRating `json:"esrb"`
+		USK  GameRating `json:"usk"`
+	}
+
+	GameRating struct {
+		AgeRestrict         int32  `json:"age_restrict"`
+		DisplayOnlineNotice bool   `json:"display_online_notice"`
+		ShowAgeRestrict     bool   `json:"show_age_restrict"`
+		Rating              string `json:"rating"`
+	}
+
+	Media struct {
+		CoverImage     LocalizedString      `json:"cover_image"`
+		CoverVideo     LocalizedString      `json:"cover_video"`
+		Trailers       LocalizedStringArray `json:"trailers"`
+		Screenshots    LocalizedStringArray `json:"screenshots"`
+		Special        LocalizedString      `json:"special"`
+		Friends        LocalizedString      `json:"friends"`
+		CapsuleGeneric LocalizedString      `json:"capsule_generic"`
+		CapsuleSmall   LocalizedString      `json:"capsule_small"`
 	}
 
 	Link struct {
@@ -42,23 +73,14 @@ type (
 		Name LocalizedString
 	}
 
-	GameDescription struct {
-		Tagline               LocalizedString `json:"tagline"`
-		Description           LocalizedString `json:"description"`
-		Reviews               GameReviews     `json:"reviews"`
-		AdditionalDescription string          `json:"additional_description"`
-		GameSite              string          `json:"game_site"`
-		Socials               Socials         `json:"socials"`
-	}
-
 	MachineRequirements struct {
 		System           string `json:"system"`
 		Processor        string `json:"processor"`
 		Graphics         string `json:"graphics"`
 		Sound            string `json:"sound"`
-		Ram              int32    `json:"ram"`
+		Ram              int32  `json:"ram"`
 		RamDimension     string `json:"ram_dimension"`
-		Storage          int32    `json:"storage"`
+		Storage          int32  `json:"storage"`
 		StorageDimension string `json:"storage_dimension"`
 		Other            string `json:"other"`
 	}
@@ -96,8 +118,7 @@ type (
 		PT Langs `json:"pt"`
 	}
 
-	GameReviews []GameReview
-	GameReview  struct {
+	GameReview struct {
 		PressName string `json:"press_name"`
 		Link      string `json:"link"`
 		Score     string `json:"score"`
@@ -109,4 +130,3 @@ type (
 		Twitter  string
 	}
 )
-

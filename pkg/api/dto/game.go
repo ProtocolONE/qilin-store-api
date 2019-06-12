@@ -28,6 +28,11 @@ type LinkDTO struct {
 	Id    string `json:"id"`
 }
 
+type MediaDTO struct {
+	Screenshots []string `json:"screenshots"`
+	Trailers    []string `json:"trailers"`
+}
+
 type GameDTO struct {
 	Name         string              `json:"name"`
 	Preview      string              `json:"preview"`
@@ -41,4 +46,5 @@ type GameDTO struct {
 	Developer    LinkDTO             `json:"developer"`
 	Publisher    LinkDTO             `json:"publisher"`
 	Requirements GameRequirementsDTO `json:"requirements"`
+	Media        MediaDTO            `json:"media"`
 }

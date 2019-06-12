@@ -42,6 +42,7 @@ type GameDTO struct {
 	Description  string              `json:"description"`
 	Platforms    []string            `json:"platforms"`
 	Tags         []LinkDTO           `json:"tags"`
+	Genres       []LinkDTO           `json:"genres"`
 	ReleaseDate  string              `json:"releaseDate"`
 	Developer    LinkDTO             `json:"developer"`
 	Publisher    LinkDTO             `json:"publisher"`

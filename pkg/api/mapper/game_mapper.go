@@ -25,6 +25,7 @@ func LinkFromModel(link model.Link) dto.LinkDTO {
 
 func GameFromModel(game *model.Game, lng string) *dto.GameDTO {
 	tags := TagsFromModel(game.Tags, lng)
+	genres := GenresFromModel(game.GenreAddition, game.GenreMain, lng)
 	return &dto.GameDTO{
 		Title:        game.Title,
 		Name:         game.Title,
@@ -36,7 +37,30 @@ func GameFromModel(game *model.Game, lng string) *dto.GameDTO {
 		Platforms:    PlatformsFromModel(game.Platforms),
 		Requirements: RequirementsFromModel(game.Requirements, game.Languages),
 		Media:        MediaFromModel(game.Media, lng),
+		Genres:       genres,
 	}
+}
+
+func GenresFromModel(genres []model.GameGenre, genre model.GameGenre, lng string) []dto.LinkDTO {
+	result := []dto.LinkDTO {
+		{
+			Id: genre.ID,
+			Title: genre.Name.GetValueOrDefault(lng),
+		},
+	}
+
+	if genres == nil {
+		return result
+	}
+
+	for _, genre := range genres {
+		result = append(result, dto.LinkDTO{
+			Id: genre.ID,
+			Title: genre.Name.GetValueOrDefault(lng),
+		})
+	}
+
+	return result
 }
 
 func MediaFromModel(media *model.Media, lng string) dto.MediaDTO {

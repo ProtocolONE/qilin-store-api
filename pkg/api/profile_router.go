@@ -31,11 +31,11 @@ func (router *ProfileRouter) updateAccountInfo(ctx echo.Context) error {
 	user := ctx.Get(userField).(*jwtverifier.UserInfo)
 
 	data := dto.UpdateUserDTO{}
-	if err := ctx.Bind(data); err != nil {
+	if err := ctx.Bind(&data); err != nil {
 		return common.NewServiceError(http.StatusBadRequest, errors.Wrap(err, "Binding to dto"))
 	}
 
-	if err := ctx.Validate(data); err != nil {
+	if err := ctx.Validate(&data); err != nil {
 		return common.NewServiceError(http.StatusUnprocessableEntity, errors.Wrap(err, "Validation failed"))
 	}
 

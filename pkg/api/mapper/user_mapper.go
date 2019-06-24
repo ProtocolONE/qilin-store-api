@@ -64,13 +64,20 @@ func userAccountFromModel(account model.UserAccount) dto.UserAccountDTO {
 	return dto.UserAccountDTO{
 		Nickname:            account.Nickname,
 		PrimaryLanguage:     account.PrimaryLanguage,
-		AdditionalLanguages: account.AdditionalLanguages,
+		AdditionalLanguages: getArrayOrEmpty(account.AdditionalLanguages),
 		Socials:             userSocialsFromModel(account.Socials),
 	}
 }
 
+func getArrayOrEmpty(arr []string) []string {
+	if arr == nil {
+		return []string{}
+	}
+	return arr
+}
+
 func userSocialsFromModel(accounts []model.UserSocialAccount) []dto.UserSocialAccountDTO {
-	var socials []dto.UserSocialAccountDTO
+	socials := []dto.UserSocialAccountDTO{}
 	for _, account := range accounts {
 		socials = append(socials, socialFromModel(account))
 	}

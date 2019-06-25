@@ -13,6 +13,7 @@ type Config struct {
 	Db       *DbConfig
 	Bus      *EventBusConfig
 	Sessions *SessionStorage
+	Cache    *CacheConfig
 }
 
 func GetConfig() (*Config, error) {

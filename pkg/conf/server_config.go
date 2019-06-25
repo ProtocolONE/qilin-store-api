@@ -31,3 +31,9 @@ type SessionStorage struct {
 	Password string `envconfig:"PASSWORD" required:"false"`
 	Secret   string `envconfig:"SECRET" required:"true" default:"secret"`
 }
+
+type CacheConfig struct {
+	Host     string `envconfig:"HOST" required:"true" default:"localhost"`
+	Port     int    `envconfig:"PORT" required:"true" default:"6379"`
+	Password string `envconfig:"PASSWORD" required:"false"`
+}

@@ -21,6 +21,7 @@ func TestUserFromModel(t *testing.T) {
 	shouldBeEqual(t, userDto.ID, user.ID)
 	shouldBeEqual(t, user.Personal, userDto.Personal)
 	shouldBeEqual(t, user.Account, userDto.Account)
+	shouldBe.Nil(userDto.Security)
 }
 
 func shouldBeEqual(t *testing.T, first interface{}, second interface{}) {

@@ -8,13 +8,13 @@ import (
 	"github.com/ProtocolONE/qilin-store-api/pkg/conf"
 	"github.com/ProtocolONE/qilin-store-api/pkg/interfaces"
 	"github.com/ProtocolONE/qilin-store-api/pkg/services"
-	"gopkg.in/go-playground/validator.v9"
 	"github.com/go-redis/redis"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"go.uber.org/zap"
+	"gopkg.in/go-playground/validator.v9"
 	"strconv"
 )
 
@@ -100,8 +100,19 @@ func NewServer(config *conf.Config) (*server, error) {
 		return nil, err
 	}
 
+	cache := redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%d", config.Cache.Host, config.Cache.Port),
+		Password: config.Cache.Password,
+		DB:       0, // use default DB
+	})
+	err = cache.Ping().Err()
+	if err != nil {
+		return nil, err
+	}
+
+	mfaService := services.NewMfaService(config.Auth1.Issuer, cache)
 	profileService := services.NewProfileService(dbProvider)
-	if _, err := api.InitProfileRouter(apiGroup, profileService); err != nil {
+	if _, err := api.InitProfileRouter(apiGroup, profileService, mfaService); err != nil {
 		return nil, err
 	}
 

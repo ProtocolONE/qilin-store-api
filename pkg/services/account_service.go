@@ -57,6 +57,9 @@ func (service *accountService) Register(userId string, register dto.RegisterAcco
 	id := bson.ObjectIdHex(userId)
 	account = &model.User{
 		ID: id,
+		Account: model.UserAccount {
+			Nickname: register.Nickname,
+		},
 		Personal: model.PersonalInformation{
 			Email:     register.Email,
 			BirthDate: register.Birthdate,

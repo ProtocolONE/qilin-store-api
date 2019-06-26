@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	jwtverifier "github.com/ProtocolONE/authone-jwt-verifier-golang"
 	"github.com/ProtocolONE/qilin-store-api/pkg/api/dto"
 	"github.com/ProtocolONE/qilin-store-api/pkg/api/mapper"

@@ -38,6 +38,8 @@ backend:
     - QILINSTOREAPI_AUTH1_ISSUER
     - QILINSTOREAPI_SESSIONS_HOST
     - QILINSTOREAPI_SESSIONS_PORT
+    - QILINSTOREAPI_CACHE_HOST
+    - QILINSTOREAPI_CACHE_PORT
     
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

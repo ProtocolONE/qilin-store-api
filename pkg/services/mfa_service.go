@@ -45,6 +45,9 @@ func (service *mfaService) List(userId string) ([]dto.MfaProviderDTO, error) {
 	storageId := fmt.Sprintf("mfa_list:%s", userId)
 	getCmd := service.storage.Get(storageId)
 	if err := getCmd.Err(); err != nil {
+		if err == redis.Nil {
+			return nil, nil
+		}
 		return nil, common.NewServiceError(http.StatusInternalServerError, err)
 	}
 

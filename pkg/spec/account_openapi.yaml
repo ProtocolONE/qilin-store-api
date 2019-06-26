@@ -59,6 +59,8 @@ paths:
                   type: string
                   format: email
                   example: 'example@test.com'
+                nickname:
+                  type: string
                 birthdate:
                   type: string
                   format: date

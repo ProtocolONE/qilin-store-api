@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	jwtverifier "github.com/ProtocolONE/authone-jwt-verifier-golang"
 	"github.com/ProtocolONE/qilin-store-api/pkg/api/dto"
 	"github.com/ProtocolONE/qilin-store-api/pkg/api/mapper"
@@ -27,8 +28,23 @@ func InitAccountRouter(group *echo.Group, accountService interfaces.AccountServi
 	g.Use(checkAuth())
 	g.POST("/login", router.authorize)
 	g.POST("/register", router.register)
+	g.POST("/logout", router.logout)
 
 	return &router, nil
+}
+
+func (router *AccountRouter) logout(ctx echo.Context) error {
+	sess, err := session.Get("session", ctx)
+	if err != nil {
+		zap.L().Error("Can't get session", zap.Error(err))
+	} else {
+		sess.Values["email"] = ""
+		sess.Values["user_id"] = ""
+		sess.Values["nickname"] = ""
+		err = sess.Save(ctx.Request(), ctx.Response())
+	}
+
+	return nil
 }
 
 func (router *AccountRouter) register(ctx echo.Context) error {
